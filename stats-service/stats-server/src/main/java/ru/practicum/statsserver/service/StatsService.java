@@ -23,7 +23,6 @@ public class StatsService {
         statsRepository.save(stats);
     }
 
-    //TODO покрыть тестами уникальные\не уникальные
     public List<ResponseDto> findStats(LocalDateTime startTime, LocalDateTime endTime, List<String> uris, Boolean unique) {
         if (uris == null || uris.isEmpty()) {
             return statsRepository.findStatsByTimestamp(startTime, endTime);
