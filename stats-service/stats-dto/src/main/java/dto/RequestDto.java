@@ -18,14 +18,13 @@ public class RequestDto {
 
     private Long id;
 
-    @NotNull
     @NotBlank
     private String app;
 
-    @NotNull
+    @NotBlank
     private String uri;
 
-    @NotNull
+    @NotBlank
     private String ip;
 
     @NotNull

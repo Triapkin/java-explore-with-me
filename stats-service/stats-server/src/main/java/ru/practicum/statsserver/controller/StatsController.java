@@ -3,7 +3,7 @@ package ru.practicum.statsserver.controller;
 
 import dto.RequestDto;
 import dto.ResponseDto;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.statsserver.service.StatsService;
@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class StatsController {
 
-    private StatsService statsService;
+    private final StatsService statsService;
 
     @PostMapping("/hit")
     public void createNewHit(@RequestBody RequestDto requestDto) {
