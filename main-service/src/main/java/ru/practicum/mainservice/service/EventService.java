@@ -149,7 +149,6 @@ public class EventService {
             Integer from,
             Integer size
     ) {
-        System.out.println();
         List<Event> events;
         if (rangeStart == null && rangeEnd == null) {
             rangeStart = LocalDateTime.now();

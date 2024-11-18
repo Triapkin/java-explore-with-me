@@ -48,10 +48,18 @@ public class RequestService {
             throw new ConflictException("Requests not pending yet");
         }
 
-        if (eventRequestStatusUpdateRequest.getStatus() == State.CONFIRMED)
+        if (event.getConfirmedRequests() != null && event.getParticipantLimit() != 0
+                && event.getConfirmedRequests().equals(event.getParticipantLimit())) {
+            throw new ConflictException("The participant limit has been reached");
+        }
+
+        if (eventRequestStatusUpdateRequest.getStatus() == State.CONFIRMED) {
             eventRequestStatusUpdateResult.setConfirmedRequests(createParticipationRequestDto(requests, State.CONFIRMED));
-        else
+            event.setConfirmedRequests(event.getConfirmedRequests() + requests.size());
+        } else {
             eventRequestStatusUpdateResult.setRejectedRequests(createParticipationRequestDto(requests, State.REJECTED));
+            event.setConfirmedRequests(event.getConfirmedRequests() - requests.size());
+        }
 
         eventRepository.save(event);
         requestRepository.saveAll(requests);
@@ -77,10 +85,12 @@ public class RequestService {
             throw new ConflictException("Нельзя участвовать в своем или неопубликованном событии");
         }
 
-        if (event.getConfirmedRequests() != 0 && event.getParticipantLimit() != 0
+//        if (!event.getRequestModeration()) {
+        if (event.getConfirmedRequests() != null && event.getParticipantLimit() != 0
                 && event.getConfirmedRequests().equals(event.getParticipantLimit())) {
             throw new ConflictException("The participant limit has been reached");
         }
+//        }
 
         User requester = userService.getUserById(userId);
         Request request = Request.builder()
@@ -88,9 +98,8 @@ public class RequestService {
 
         if (event.getParticipantLimit() == 0 || !event.getRequestModeration()) {
             request.setStatus((State.CONFIRMED));
+            event.setConfirmedRequests(event.getConfirmedRequests() + 1);
         } else request.setStatus((State.PENDING));
-
-        event.setConfirmedRequests(event.getConfirmedRequests() + 1);
 
         requestRepository.save(request);
         eventRepository.save(event);

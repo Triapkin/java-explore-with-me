@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.mainservice.dto.events.EventFullDto;
 import ru.practicum.mainservice.dto.events.EventShortDto;
 import ru.practicum.mainservice.dto.events.NewEventDto;
@@ -57,5 +58,6 @@ public class PrivateEventsController {
     @PatchMapping("/{eventId}/requests")
     public EventRequestStatusUpdateResult updateRequest(@PathVariable Integer userId, @PathVariable Integer eventId, @RequestBody EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
         return requestService.updateRequests(userId, eventId, eventRequestStatusUpdateRequest);
+
     }
 }
