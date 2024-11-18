@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.mainservice.dto.request.EventRequestStatusUpdateRequest;
 import ru.practicum.mainservice.dto.request.EventRequestStatusUpdateResult;
 import ru.practicum.mainservice.dto.request.ParticipationRequestDto;
+import ru.practicum.mainservice.exception.BadRequestException;
 import ru.practicum.mainservice.exception.ConflictException;
 import ru.practicum.mainservice.exception.NotFoundException;
 import ru.practicum.mainservice.mapper.RequestMapper;
@@ -72,14 +73,14 @@ public class RequestService {
         }
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("Event не найден"));
 
-        if (event.getConfirmedRequests() != 0 && event.getParticipantLimit() != 0
-                && event.getConfirmedRequests().equals(event.getParticipantLimit())) {
-            throw new ConflictException("The participant limit has been reached");
-        }
-
         if (event.getInitiator().getId().equals(userId) || event.getState() == State.PENDING ||
                 event.getState() == State.CANCELED) {
             throw new ConflictException("Нельзя участвовать в своем или неопубликованном событии");
+        }
+
+        if (event.getConfirmedRequests() != 0 && event.getParticipantLimit() != 0
+                && event.getConfirmedRequests().equals(event.getParticipantLimit())) {
+            throw new ConflictException("The participant limit has been reached");
         }
 
         User requester = userService.getUserById(userId);
