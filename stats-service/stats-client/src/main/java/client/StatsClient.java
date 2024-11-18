@@ -1,15 +1,9 @@
 package client;
 
 import dto.RequestDto;
-import dto.ResponseDto;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class StatsClient {
