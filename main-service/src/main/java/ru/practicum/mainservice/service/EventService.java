@@ -183,19 +183,8 @@ public class EventService {
         return eventMapper.toEventFullDto(event);
     }
 
-    public EventFullDto getEvent(Integer eventId, String ip) {
-        //Event event = eventRepository.findByIdAndStateIn(eventId, List.of(State.PUBLISHED)).orElseThrow(() -> new NotFoundException("Event не найден"));
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("Event не найден"));
-        if (event.getViews() == null) event.setViews(1);
-        else event.setViews(event.getViews() + 1);
-        addNewHit("/events/" + eventId, ip);
-
-        return eventMapper.toEventFullDto(event);
-    }
-
     public EventFullDto getPublicEvent(Integer eventId, String ip) {
         Event event = eventRepository.findByIdAndStateIn(eventId, List.of(State.PUBLISHED)).orElseThrow(() -> new NotFoundException("Event не найден"));
-        //Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("Event не найден"));
         if (event.getViews() == null) event.setViews(1);
         else event.setViews(event.getViews() + 1);
         addNewHit("/events/" + eventId, ip);

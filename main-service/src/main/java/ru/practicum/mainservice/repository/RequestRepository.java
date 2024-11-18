@@ -7,14 +7,6 @@ import java.util.List;
 
 public interface RequestRepository extends JpaRepository<Request, Integer> {
 
-    Request findRequestByRequesterIdAndEventId(Integer requesterId, Integer eventId);
-
-    Request findByEventId(Integer eventId);
-
-    Request findByRequester_Id(Integer requesterId);
-
-    Request findByEventIdAndRequesterId(Integer eventId, Integer requesterId);
-
     List<Request> findAllByRequester_Id(Integer userId);
 
     Boolean existsParticipationRequestByRequester_idAndEvent_Id(Integer userId, Integer eventId);
