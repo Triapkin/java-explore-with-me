@@ -3,7 +3,9 @@ package ru.practicum.statsserver.service;
 import dto.RequestDto;
 import dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.statsserver.mapper.StatsMapper;
 import ru.practicum.statsserver.model.Stats;
 import ru.practicum.statsserver.repository.StatsRepository;
@@ -24,6 +26,10 @@ public class StatsService {
     }
 
     public List<ResponseDto> findStats(LocalDateTime startTime, LocalDateTime endTime, List<String> uris, Boolean unique) {
+        if (endTime.isBefore(startTime)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Дата окончания не может быть до даты начала");
+        }
+
         if (uris == null || uris.isEmpty()) {
             return statsRepository.findStatsByTimestamp(startTime, endTime);
         }
