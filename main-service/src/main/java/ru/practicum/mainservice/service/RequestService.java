@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.practicum.mainservice.dto.request.EventRequestStatusUpdateRequest;
 import ru.practicum.mainservice.dto.request.EventRequestStatusUpdateResult;
 import ru.practicum.mainservice.dto.request.ParticipationRequestDto;
-import ru.practicum.mainservice.exception.BadRequestException;
 import ru.practicum.mainservice.exception.ConflictException;
 import ru.practicum.mainservice.exception.NotFoundException;
 import ru.practicum.mainservice.mapper.RequestMapper;
