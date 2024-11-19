@@ -56,11 +56,7 @@ public class EventService {
         event.setCategory(category);
         event.setLocation(location);
         event.setState(State.PENDING);
-        event.setCreatedOn(LocalDateTime.now());
         event.setConfirmedRequests(0);
-        if (newEventDto.getParticipantLimit() == null) event.setParticipantLimit(0);
-        if (newEventDto.getPaid() == null) event.setPaid(false);
-        if (newEventDto.getRequestModeration() == null) event.setRequestModeration(true);
 
         eventRepository.save(event);
         return eventMapper.toEventFullDto(event);
@@ -127,7 +123,7 @@ public class EventService {
         }
 
         if (text != null && paid != null && sort != null && categories != null) {
-            events = eventRepository.findAllByAnnotationContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndCategory_IdInAndPaidIsAndEventDateBeforeAndEventDateAfter(
+            events = eventRepository.findAllByCriteria(
                             text, text, categories, paid, end, start, PageRequest.of(from / size, size))
                     .getContent();
         } else {

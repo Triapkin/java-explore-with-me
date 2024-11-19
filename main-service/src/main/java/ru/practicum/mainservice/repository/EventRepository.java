@@ -3,6 +3,8 @@ package ru.practicum.mainservice.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.practicum.mainservice.model.Event;
 import ru.practicum.mainservice.model.enums.State;
 
@@ -17,13 +19,19 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     Page<Event> findAllByEventDateBeforeAndEventDateAfter(LocalDateTime start, LocalDateTime end, Pageable pageable);
 
-    Page<Event> findAllByAnnotationContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndCategory_IdInAndPaidIsAndEventDateBeforeAndEventDateAfter(
-            String text,
-            String text2,
-            List<Integer> categories,
-            Boolean paid,
-            LocalDateTime rangeStart,
-            LocalDateTime rangeEnd,
+    @Query("SELECT e FROM Event e " +
+            "WHERE LOWER(e.annotation) LIKE LOWER(:text) " +
+            "OR LOWER(e.description) LIKE LOWER(:text2) " +
+            "AND e.category.id IN (:categories) " +
+            "AND e.paid = :paid " +
+            "AND e.eventDate BETWEEN :rangeStart AND :rangeEnd")
+    Page<Event> findAllByCriteria(
+            @Param("text") String text,
+            @Param("text2") String text2,
+            @Param("categories") List<Integer> categories,
+            @Param("paid") Boolean paid,
+            @Param("rangeStart") LocalDateTime rangeStart,
+            @Param("rangeEnd") LocalDateTime rangeEnd,
             Pageable pageable);
 
     Event findByIdAndInitiator_Id(Integer id, Integer initiatorId);
