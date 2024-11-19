@@ -7,7 +7,7 @@ import ru.practicum.mainservice.model.Event;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Mapper(componentModel = "spring", imports = {LocalDateTime.class} )
+@Mapper(componentModel = "spring", imports = {LocalDateTime.class})
 public interface EventMapper {
     @Mapping(target = "category", ignore = true)
     Event toEvent(NewEventDto newEventDto);
