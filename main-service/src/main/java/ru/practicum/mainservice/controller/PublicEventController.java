@@ -4,8 +4,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.mainservice.dto.comment.CommentDto;
 import ru.practicum.mainservice.dto.events.EventFullDto;
 import ru.practicum.mainservice.dto.events.EventShortDto;
+import ru.practicum.mainservice.service.CommentService;
 import ru.practicum.mainservice.service.EventService;
 
 import java.time.LocalDateTime;
@@ -15,7 +17,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/events")
 public class PublicEventController {
+
     private final EventService eventService;
+    private final CommentService commentService;
 
     @GetMapping
     public List<EventShortDto> getEvents(
@@ -31,6 +35,11 @@ public class PublicEventController {
             HttpServletRequest request
     ) {
         return eventService.getEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size, request.getRemoteAddr());
+    }
+
+    @GetMapping("/{eventId}/comments")
+    public List<CommentDto> getAllComments(@PathVariable Integer eventId) {
+        return commentService.getAllComments(eventId);
     }
 
     @GetMapping("/{eventId}")
